@@ -11,3 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+.paspirtukai-container {
+  border: 2px solid red;
+  padding: 20px;
+  margin: 20px;
+  width: 400px;
+}
+.paspirtukas-new {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid red;
+  padding: 20px;
+  margin: 20px;
+  width: 400px;
+  gap: 30px;
+}
