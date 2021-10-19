@@ -15,7 +15,6 @@ function PaspirtukasOne({ data, getId, paspirtukasEdit }) {
   const isChecked = () => {
     data.is_busy === 0 ? setIsBusy(false) : setIsBusy(true);
   };
-
   const dateFormat = (d) => {
       d = new Date(d)
       let year = d.getFullYear();
@@ -30,10 +29,6 @@ function PaspirtukasOne({ data, getId, paspirtukasEdit }) {
       setDateEdit(`${year}-${month}-${day}`)
     }
     
-
-
-
-
   const inputHandler = (event, data) => {
     switch (data) {
       case "date":
