@@ -1,22 +1,38 @@
 import { useEffect, useState } from "react";
 
 function PaspirtukasOne({ data, getId, paspirtukasEdit }) {
-  const [dateEdit, setDateEdit] = useState(data.last_use_time.slice(0, 10));
-  const [totalRideKilometres, setTotalRideKilometres] = useState(data.total_ride_kilometres);
+  const [dateEdit, setDateEdit] = useState(data.last_use_time);
+  const [totalRideKilometres, setTotalRideKilometres] = useState(
+    data.total_ride_kilometres
+  );
   const [isBusy, setIsBusy] = useState();
-
 
   useEffect(() => {
     isChecked();
-  }, [data]);
+    dateFormat(dateEdit)
+    
+  }, []);
   const isChecked = () => {
     data.is_busy === 0 ? setIsBusy(false) : setIsBusy(true);
   };
-  
 
- let d = new Date(data.last_use_time)
+  const dateFormat = (d) => {
+      d = new Date(d)
+      let year = d.getFullYear();
+      let month = d.getMonth() + 1;
+      if (month < 10) {
+        month = "0" + month;
+      }
+      let day = d.getDate();
+      if (day < 10) {
+        day = "0" + day;
+      }
+      setDateEdit(`${year}-${month}-${day}`)
+    }
+    
 
- console.log(d.getDay() + " id= : " + data.id);
+
+
 
   const inputHandler = (event, data) => {
     switch (data) {
@@ -55,11 +71,7 @@ function PaspirtukasOne({ data, getId, paspirtukasEdit }) {
         onChange={(event) => inputHandler(event, "isBusy")}
       />
 
-      <h3>
-        {data.last_use_time === "0000-00-00"
-          ? "Nenaudotas"
-          : data.last_use_time}
-      </h3>
+      <h3>{data.last_use_time === "0000-00-00" ? "Nenaudotas" : dateEdit}</h3>
       <input
         type="date"
         value={dateEdit}

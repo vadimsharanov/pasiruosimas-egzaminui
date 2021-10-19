@@ -7,6 +7,8 @@ function Paspirtukai() {
   const [paspirtukai, setPaspirtukai] = useState([]);
   const [postuKeitimoLaikas, setPostuKeitimoLaikas] = useState(Date.now());
 
+
+
   useEffect(() => {
     axios
       .get("http://localhost:3002/paspirtukai")
