@@ -1,28 +1,85 @@
-import { useState } from "react"
-import Redagavimas from "./Redagavimas"
+import { useEffect, useState } from "react";
+
+function PaspirtukasOne({ data, getId, paspirtukasEdit }) {
+  const [dateEdit, setDateEdit] = useState(data.last_use_time.slice(0, 10));
+  const [totalRideKilometres, setTotalRideKilometres] = useState(data.total_ride_kilometres);
+  const [isBusy, setIsBusy] = useState();
 
 
+  useEffect(() => {
+    isChecked();
+  }, [data]);
+  const isChecked = () => {
+    data.is_busy === 0 ? setIsBusy(false) : setIsBusy(true);
+  };
+  
 
-function PaspirtukasOne({data,getId}) {
+ let d = new Date(data.last_use_time)
 
-    const [openEdit, setOpenEdit] = useState(0)
+ console.log(d.getDay() + " id= : " + data.id);
 
-    const setOpen = () => {
-        setOpenEdit(data.id)
+  const inputHandler = (event, data) => {
+    switch (data) {
+      case "date":
+        setDateEdit(event.target.value);
+        break;
+      case "totalRideKilometres":
+        setTotalRideKilometres(event.target.value);
+        break;
+
+      case "isBusy":
+        setIsBusy(event.target.checked);
+        break;
     }
+  };
 
-    return (
-        <div className="paspirtukai-container" >
-            {openEdit ===0? null : <div><Redagavimas></Redagavimas></div> }
-            <h3><button onClick={()=> getId(data.id)} >delete</button></h3>
-            <h3><button onClick={setOpen} >update</button></h3>
-            <h3>{data.id}</h3>
-            <h3>{data.is_busy === 1? "busy" : "free"}</h3>
-            <h3>{data.last_use_time === "0000-00-00" ? "Nenaudotas" : data.last_use_time}</h3>
-            <h3>{data.registration_code}</h3>
-            <h3>{data.total_ride_kilometres}</h3>
-        </div>
-    )
+  const editPaspirtukas = () => {
+    let inputData = {
+      dateEdit: dateEdit,
+      totalRideKilometres: parseInt(totalRideKilometres),
+      isBusy: isBusy ? 1 : 0,
+    };
+    console.log(inputData);
+    paspirtukasEdit(inputData, data.id);
+  };
+
+  return (
+    <div className="paspirtukai-container">
+      <h3>{data.id}</h3>
+      <h3>{data.is_busy === 1 ? "busy" : "free"}</h3>
+
+      <input
+        type="checkbox"
+        value="on"
+        checked={isBusy}
+        onChange={(event) => inputHandler(event, "isBusy")}
+      />
+
+      <h3>
+        {data.last_use_time === "0000-00-00"
+          ? "Nenaudotas"
+          : data.last_use_time}
+      </h3>
+      <input
+        type="date"
+        value={dateEdit}
+        onChange={(event) => inputHandler(event, "date")}
+      />
+      <h3>{data.registration_code}</h3>
+      <h3>{data.total_ride_kilometres}</h3>
+      <input
+        type="number"
+        value={totalRideKilometres}
+        onChange={(event) => inputHandler(event, "totalRideKilometres")}
+      />
+      <h3>
+        <button onClick={() => getId(data.id)}>delete</button>
+      </h3>
+      <h3>
+        <button onClick={editPaspirtukas}>update</button>
+      </h3>
+    </div>
+  );
 }
 
-export default PaspirtukasOne
+export default PaspirtukasOne;

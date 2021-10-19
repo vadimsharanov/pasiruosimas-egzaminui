@@ -45,6 +45,18 @@ function Paspirtukai() {
       });
   };
 
+  const paspirtukasEdit = (data,id) => {
+    axios
+    .put("http://localhost:3002/paspirtukai/" + id, data)
+    .then(function (response) {
+      setPostuKeitimoLaikas(Date.now());
+    })
+    .catch(function (error) {
+      // handle error
+      console.log(error);
+    });
+  }
+
   const getId = (id) => {
     paspirtukasRemove(id);
   };
@@ -63,6 +75,7 @@ function Paspirtukai() {
           getId={getId}
           key={item.id}
           data={item}
+          paspirtukasEdit={paspirtukasEdit}
         ></PaspirtukasOne>
       ))}
     </div>

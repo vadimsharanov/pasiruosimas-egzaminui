@@ -41,7 +41,7 @@ app.post('/paspirtukai/', (req, res) => {
    VALUES (?,?,?,?);
   `
   connection.query(sql,[req.body.registrationCode,
-     req.body.isBusy,"0000-00-00", 0
+     req.body.isBusy,"0000-00-00", "0"
     ], (err,result) => {
     if (err) {throw err}
     res.send(result)
@@ -64,25 +64,24 @@ app.delete('/paspirtukai/:id', (req, res) => {
 // SET column1 = value1, column2 = value2, ...
 // WHERE condition;
 
-// app.put('/paspirtukai/:id', (req, res) => {
-//     console.log(req.body);
-//   let sql = `
-//     update paspirtukai
-//     set registration_code = ?, is_busy = ?, last_use_time = ?, total_ride_kilometres=?
-//     where id = ?
-//   `
-//   connection.query(sql,[
-//     req.body.data.registrationCode,
-//     req.body.data.isBusy,
-//     req.body.data.lastUseTime,
-//     req.body.data.totalRide,
-//     req.params.id,
-//     ], (err,result) => {
-//     if (err) {throw err}
-//     res.send(result)
-//     console.log("updated!");
-//   })
-// })
+app.put('/paspirtukai/:id', (req, res) => {
+    console.log(req.body);
+  let sql = `
+    update paspirtukai
+    set  is_busy = ?, last_use_time = ?, total_ride_kilometres=?
+    where id = ?
+  `
+  connection.query(sql,[
+    req.body.isBusy,
+    req.body.dateEdit,
+    req.body.totalRideKilometres,
+    req.params.id,
+    ], (err,result) => {
+    if (err) {console.log(err) }
+    res.send(result)
+    console.log("updated!");
+  })
+})
 
 
 app.listen(PORT, () => {
