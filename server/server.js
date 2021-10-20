@@ -41,7 +41,7 @@ app.post('/paspirtukai/', (req, res) => {
    VALUES (?,?,?,?);
   `
   connection.query(sql,[req.body.registrationCode,
-     req.body.isBusy,"0000-00-00", "0"
+     0,"0000-00-00", "0"
     ], (err,result) => {
     if (err) {throw err}
     res.send(result)
@@ -79,8 +79,30 @@ app.put('/paspirtukai/:id', (req, res) => {
     ], (err,result) => {
     if (err) {console.log(err) }
     res.send(result)
-    console.log("updated!");
+    console.log("updadddted!");
   })
+})
+
+
+
+app.get("/paspirtukai/count", (req, res) => {
+    connection.query("SELECT count(id) as paspirtukuSkaicius FROM bandomasis.paspirtukai", (err, result)=> {
+        if (err) {
+            throw err
+        }
+        res.json(result);
+    })
+})
+
+
+
+app.get("/paspirtukai/totalRide", (req, res) => {
+    connection.query("SELECT SUM(total_ride_kilometres) as rideSum FROM bandomasis.paspirtukai", (err, result)=> {
+        if (err) {
+            throw err
+        }
+        res.json(result);
+    })
 })
 
 

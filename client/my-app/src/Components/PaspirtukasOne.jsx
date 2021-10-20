@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 
-function PaspirtukasOne({ data, getId, paspirtukasEdit }) {
+function PaspirtukasOne({ data, getId, paspirtukasEdit,index }) {
   const [dateEdit, setDateEdit] = useState(data.last_use_time);
-  const [totalRideKilometres, setTotalRideKilometres] = useState(
-    data.total_ride_kilometres
-  );
+  const [totalRideKilometres, setTotalRideKilometres] = useState(0);
   const [isBusy, setIsBusy] = useState();
+
 
   useEffect(() => {
     isChecked();
     dateFormat(dateEdit)
     
-  }, []);
+  }, [dateEdit]);
   const isChecked = () => {
     data.is_busy === 0 ? setIsBusy(false) : setIsBusy(true);
   };
@@ -46,17 +45,20 @@ function PaspirtukasOne({ data, getId, paspirtukasEdit }) {
 
   const editPaspirtukas = () => {
     let inputData = {
-      dateEdit: dateEdit,
-      totalRideKilometres: parseInt(totalRideKilometres),
+      dateEdit: dateEdit === 'NaN-NaN-NaN'? "0000-00-00" : dateEdit ,
+      totalRideKilometres: parseInt(totalRideKilometres) + data.total_ride_kilometres,
       isBusy: isBusy ? 1 : 0,
     };
     console.log(inputData);
+
     paspirtukasEdit(inputData, data.id);
   };
+  console.log(dateEdit);
+  
 
   return (
-    <div className="paspirtukai-container">
-      <h3>{data.id}</h3>
+    <div className="paspirtukas-one">
+      <h3>{index}</h3>
       <h3>{data.is_busy === 1 ? "busy" : "free"}</h3>
 
       <input
@@ -66,7 +68,7 @@ function PaspirtukasOne({ data, getId, paspirtukasEdit }) {
         onChange={(event) => inputHandler(event, "isBusy")}
       />
 
-      <h3>{data.last_use_time === "0000-00-00" ? "Nenaudotas" : dateEdit}</h3>
+      <h3>{dateEdit ===  'NaN-NaN-NaN' ? "Nenaudotas" : dateEdit}</h3>
       <input
         type="date"
         value={dateEdit}
@@ -90,3 +92,7 @@ function PaspirtukasOne({ data, getId, paspirtukasEdit }) {
 }
 
 export default PaspirtukasOne;
+
+// Sukurkite statistikos laukelius, kuriuose būtų atvaizduojamas paspirtukų kiekis ir bendras
+// visų paspirtukų nuvažiuotas kilometrų kiekis (duomenys gaunami iš serverio duomenų
+// bazės) Keičiantis duomenų bazės įrašams automatiškai turi keistis ir statistika.
